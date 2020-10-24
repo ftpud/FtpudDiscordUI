@@ -14,12 +14,12 @@ namespace DiscordBot1
     {
         public TestPage(UiHelper helper)
         {
-            var checkBox = new CheckBox("Pisjun enabled");
+            var checkBox = new CheckBox("CheckBox checked");
             var label = new TextView("Текст текст текст");
             var label2 = new TextView("----------");
             var labelHeader = new HeaderText("Заголовок");
             var list = new ListView(
-                new string[] {"Да", "Ыыы", "Писюн"}
+                new string[] {"Да", "Ыыы", "CheckBox"}
             );
             var button = new SimpleButton("\u2B07",  async () =>
             {
@@ -78,7 +78,7 @@ namespace DiscordBot1
     internal class Program
     {
         private DiscordSocketClient _client;
-        private UiHelper ui;
+        private UiHelper _ui;
         
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -87,7 +87,7 @@ namespace DiscordBot1
         {
             var token = File.ReadAllText("token.txt");
             _client = new DiscordSocketClient();
-            ui = new UiHelper(_client);
+            _ui = new UiHelper(_client);
             
             _client.Log += ClientOnLog;
             _client.MessageReceived += ClientOnMessageReceived;
@@ -104,10 +104,6 @@ namespace DiscordBot1
             if (arg.Content.Contains( "init" ))
             {
                 RestUserMessage msg = await arg.Channel.SendMessageAsync("Hi " + arg.Channel.Id);
-                
-                var g = _client.Guilds;
-                
-                //await ui.DisplayPage(new TestPage(), msg.Channel);
             }
         }
 
@@ -117,7 +113,7 @@ namespace DiscordBot1
             if (arg.ToString().Contains("Ready"))
             {
                 var channel = _client.GetGuild(769296012585467935).GetTextChannel(769296012585467938);
-                await ui.DisplayPage(new TestPage(ui), channel);
+                await _ui.DisplayPage(new TestPage(_ui), channel);
             }
         }
 

@@ -7,7 +7,7 @@ namespace FtpudDiscordUI.Elements
 {
     public abstract class UiElement
     {
-        public UiPage parent;
+        public UiPage Parent;
 
         public virtual void CreateElementView(EmbedBuilder builder) { }
 
@@ -15,7 +15,7 @@ namespace FtpudDiscordUI.Elements
         
         public void SetParent(UiPage page)
         {
-            parent = page;
+            Parent = page;
         }
 
         public virtual Task HandleEvent(SocketReaction arg3)

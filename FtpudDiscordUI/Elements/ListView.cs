@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Discord;
 
 namespace FtpudDiscordUI.Elements
@@ -21,22 +22,22 @@ namespace FtpudDiscordUI.Elements
 
         public override void CreateElementView(EmbedBuilder builder)
         {
-            var listText = "";
+            var listText = new StringBuilder();
             for (var i = 0; i < Size; i++)
             {
                 if (i == Index)
                 {
-                    listText += $"`{_values.ElementAt(i)}`";
+                    listText.Append($"`{_values.ElementAt(i)}`");
                 }
                 else
                 {
-                    listText += _values.ElementAt(i);
+                    listText.Append(_values.ElementAt(i));
                 }
 
-                listText += "\n";
+                listText.Append("\n");
             }
-            listText += "\n";
-            builder.Description += listText;
+            listText.Append("\n");
+            builder.Description += listText.ToString();
         }
     }
 }

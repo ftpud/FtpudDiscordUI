@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot1", "DiscordBot1\DiscordBot1.csproj", "{985F582D-4955-49AC-BDC3-0D6563DAEDB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpudDiscordUI", "FtpudDiscordUI\FtpudDiscordUI.csproj", "{7A36B321-C455-40EE-84E1-147572A86DA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{985F582D-4955-49AC-BDC3-0D6563DAEDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985F582D-4955-49AC-BDC3-0D6563DAEDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985F582D-4955-49AC-BDC3-0D6563DAEDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985F582D-4955-49AC-BDC3-0D6563DAEDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A36B321-C455-40EE-84E1-147572A86DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A36B321-C455-40EE-84E1-147572A86DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A36B321-C455-40EE-84E1-147572A86DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A36B321-C455-40EE-84E1-147572A86DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

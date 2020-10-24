@@ -10,12 +10,12 @@ namespace FtpudDiscordUI.Elements
     {
         public String Value => Index >= 0 && Index < _values.Count() ? _values.ElementAt(Index) : "";
 
-        private readonly IEnumerable<string> _values;
+        private readonly IReadOnlyCollection<string> _values;
 
         public int Index { get; set; } = 0;
-        public int Size => _values.Count();
+        public int Size => _values.Count;
 
-        public ListView(IEnumerable<String> values)
+        public ListView(IReadOnlyCollection<String> values)
         {
             _values = values;
         }

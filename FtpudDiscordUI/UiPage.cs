@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -24,7 +25,7 @@ namespace FtpudDiscordUI
         public void AddElement(UiElement element)
         {
             _elements.Add(element);
-            element.SetParent(this);
+            element.Parent = this;
         }
 
         public async Task UpdateView()
@@ -42,9 +43,8 @@ namespace FtpudDiscordUI
         protected async Task UpdateReactions(IUserMessage msg)
         {
             await Root.RemoveAllReactionsAsync();
-            var emoteList = new List<IEmote>();
-            _elements.ForEach(el => el.CreateElementReactions(emoteList));
-            await msg.AddReactionsAsync(emoteList.ToArray());
+            await msg.AddReactionsAsync(
+                _elements.SelectMany(el => el.CreateElementReactions()).ToArray());
         }
 
         public async Task Update()
@@ -59,9 +59,9 @@ namespace FtpudDiscordUI
             await UpdateView();
         }
         
-        public Task HandleEvents(SocketReaction arg3)
+        public Task HandleEvents(SocketReaction reaction)
         {
-            _elements.ForEach(async e => await e.HandleEvent(arg3));
+            _elements.ForEach(async e => await e.HandleEvent(reaction));
             return Task.CompletedTask;
         }
 

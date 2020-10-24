@@ -12,20 +12,20 @@ namespace FtpudDiscordUI.Elements
         public readonly Func<Task> OnClick;
         public SimpleButton(String emote, Func<Task> onClick)
         {
-            this._emote = emote;
-            this.OnClick = onClick;
+            _emote = emote;
+            OnClick = onClick;
         }
 
-        public override void CreateElementReactions(List<IEmote> emotes)
+        public override IEnumerable<IEmote> CreateElementReactions()
         {
-            emotes.Add(new Emoji(_emote));
+            return new List<IEmote> { new Emoji(_emote) };
         }
 
         public override async Task HandleEvent(SocketReaction reaction)
         {
             if (reaction.Emote.Name == _emote)
             {
-                await OnClick.Invoke();
+                await OnClick();
             }
         }
     }

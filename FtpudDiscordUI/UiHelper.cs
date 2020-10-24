@@ -10,10 +10,13 @@ namespace FtpudDiscordUI
     {
         private readonly List<UiPage> _pagesList = new List<UiPage>();
 
+        private DiscordSocketClient _client;
+        
         public UiHelper(DiscordSocketClient client)
         {
             client.ReactionAdded += ClientOnReactionToggle;
             client.ReactionRemoved += ClientOnReactionToggle;
+            _client = client;
         }
 
         public async Task DisplayPage(UiPage page, IMessageChannel targetChannel)
@@ -32,25 +35,21 @@ namespace FtpudDiscordUI
             await page.Close();
         }
 
-        async Task OnClick(SocketReaction arg3)
+        async Task OnClick(SocketReaction reaction)
         {
-            if (arg3.UserId != 769294625818148874)
+            if (reaction.UserId != _client.CurrentUser.Id)
             {
-                var id = arg3.MessageId;
+                var id = reaction.MessageId;
                 var page = _pagesList.FirstOrDefault(p => p.IsCurrentMessage(id));
                 if (page != null)
                 {
-                    await page.HandleEvents(arg3);
+                    await page.HandleEvents(reaction);
                 }
             }
         }
 
-        private Task ClientOnReactionToggle(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
-        {
-            OnClick(arg3).Wait();
-            return Task.CompletedTask;
-        }
-        
+        private Task ClientOnReactionToggle(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel messageChannel,
+            SocketReaction reaction) => OnClick(reaction);
         
     }
 }

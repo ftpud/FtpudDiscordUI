@@ -7,15 +7,13 @@ namespace FtpudDiscordUI.Elements
 {
     public abstract class UiElement
     {
-        public UiPage Parent;
+        public UiPage Parent { get; set; }
 
         public virtual void CreateElementView(EmbedBuilder builder) { }
 
-        public virtual void CreateElementReactions(List<IEmote> list) { }
-        
-        public void SetParent(UiPage page)
+        public virtual IEnumerable<IEmote> CreateElementReactions()
         {
-            Parent = page;
+            return new List<IEmote>();
         }
 
         public virtual Task HandleEvent(SocketReaction arg3)

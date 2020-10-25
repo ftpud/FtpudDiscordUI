@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -7,10 +8,42 @@ using FtpudDiscordUI.Elements;
 
 namespace FtpudDiscordUI
 {
+    public static class ObjectUtils {
+        public static bool Compare<T>(T Object1, T object2)
+        {
+            //Get the type of the object
+            Type type = typeof(T);
+
+            //return false if any of the object is false
+            if (object.Equals(Object1, default(T)) || object.Equals(object2, default(T)))
+                return false;
+
+            //Loop through each properties inside class and get values for the property from both the objects and compare
+            foreach (System.Reflection.PropertyInfo property in type.GetProperties())
+            {
+                if (property.Name != "ExtensionData")
+                {
+                    string Object1Value = string.Empty;
+                    string Object2Value = string.Empty;
+                    if (type.GetProperty(property.Name).GetValue(Object1, null) != null)
+                        Object1Value = type.GetProperty(property.Name).GetValue(Object1, null).ToString();
+                    if (type.GetProperty(property.Name).GetValue(object2, null) != null)
+                        Object2Value = type.GetProperty(property.Name).GetValue(object2, null).ToString();
+                    if (Object1Value.Trim() != Object2Value.Trim())
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
     public class UiPage
     {
         private readonly List<UiElement> _elements;
-        protected IUserMessage Root;
+        public IUserMessage Root { get; set; }
+        private Embed latestBody;
 
         public bool IsCurrentMessage(ulong id)
         {
@@ -30,20 +63,41 @@ namespace FtpudDiscordUI
 
         public async Task UpdateView()
         {
-            
-            await Root.ModifyAsync(msg =>
+            EmbedBuilder builder = new EmbedBuilder();
+            _elements.ForEach(el => el.CreateElementView(builder));
+            Decorate(builder);
+            // Check if something is changed in body before sending it to server
+            // trade some cpu cycles to reduce network load
+            var body = builder.Build();
+            if (!ObjectUtils.Compare(body, latestBody))
             {
-                msg.Content = "";
-                EmbedBuilder builder = new EmbedBuilder();
-                _elements.ForEach(el => el.CreateElementView(builder));
-                msg.Embed = builder.Build();
-            });
+                try
+                {
+                    await Root.ModifyAsync(msg =>
+                    {
+                        msg.Content = "";
+                        msg.Embed = body;
+                    });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                latestBody = body;
+            }
+            
         }
-        
+
+        protected virtual void Decorate(EmbedBuilder embedBuilder)
+        {
+            
+        }
+
         protected async Task UpdateReactions(IUserMessage msg)
         {
             await Root.RemoveAllReactionsAsync();
-            await msg.AddReactionsAsync(
+            msg.AddReactionsAsync(
                 _elements.SelectMany(el => el.CreateElementReactions()).ToArray());
         }
 
@@ -67,6 +121,7 @@ namespace FtpudDiscordUI
 
         public async Task Close()
         {
+            latestBody = null;
             await Root.DeleteAsync();
         }
     }

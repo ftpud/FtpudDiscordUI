@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -34,16 +35,29 @@ namespace FtpudDiscordUI
             _pagesList.Remove(page);
             await page.Close();
         }
+        
+        public async Task SwitchPage(UiPage old, UiPage newPage)
+        {
+            await ClosePage(old);
+            await DisplayPage(newPage, old.Root.Channel);
+        }
 
         async Task OnClick(SocketReaction reaction)
         {
             if (reaction.UserId != _client.CurrentUser.Id)
             {
-                var id = reaction.MessageId;
-                var page = _pagesList.FirstOrDefault(p => p.IsCurrentMessage(id));
-                if (page != null)
+                try
                 {
-                    await page.HandleEvents(reaction);
+                    var id = reaction.MessageId;
+                    var page = _pagesList.FirstOrDefault(p => p.IsCurrentMessage(id));
+                    if (page != null)
+                    {
+                        await page.HandleEvents(reaction);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
         }

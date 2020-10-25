@@ -21,17 +21,17 @@ namespace DiscordBot1
             var list = new ListView(
                 new string[] {"Да", "Ыыы", "CheckBox"}
             );
-            var button = new SimpleButton("\u2B07",  async () =>
+            var button = new SimpleButton("\u2B07",  async reaction =>
             {
                 if(list.Index < 2) list.Index++;
                await UpdateView();
             });
-            var button2 = new SimpleButton("\u2B06",  async () =>
+            var button2 = new SimpleButton("\u2B06",  async reaction =>
             {
                 if(list.Index > 0) list.Index--;
                 await UpdateView();
             });
-            var button3 = new SimpleButton("\uD83C\uDD97",  async () =>
+            var button3 = new SimpleButton("\uD83C\uDD97",  async reaction =>
             {
                 await Root.Channel.SendMessageAsync(list.Value);
                 if (list.Index == 2)
@@ -64,7 +64,7 @@ namespace DiscordBot1
             TextView label = new TextView("Текст текст текст");
             TextView label2 = new TextView("----------");
             HeaderText labelHeader = new HeaderText("ЫЫЫЫЫЫ");
-            SimpleButton button3 = new SimpleButton("\u274E",  async () =>
+            SimpleButton button3 = new SimpleButton("\u274E",  async reaction =>
             {
                 await helper.ClosePage(this);
             });
@@ -100,7 +100,7 @@ namespace DiscordBot1
 
         private async Task ClientOnMessageReceived(SocketMessage arg)
         {
-            Console.WriteLine(arg.ToString());
+            Console.WriteLine(arg + " " + arg.Author.Discriminator);
             if (arg.Content.Contains( "init" ))
             {
                 RestUserMessage msg = await arg.Channel.SendMessageAsync("Hi " + arg.Channel.Id);

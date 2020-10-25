@@ -11,8 +11,14 @@ namespace FtpudDiscordUI.Elements
         public String Value => Index >= 0 && Index < _values.Count() ? _values.ElementAt(Index) : "";
 
         private readonly IReadOnlyCollection<string> _values;
-
-        public int Index { get; set; } = 0;
+        
+        public int _index = 0;
+        public int Index
+        {
+            get => _index;
+            set => _index = value >= 0 && value < Size ? value : _index;
+        }
+        
         public int Size => _values.Count;
 
         public ListView(IReadOnlyCollection<String> values)
@@ -27,7 +33,7 @@ namespace FtpudDiscordUI.Elements
             {
                 if (i == Index)
                 {
-                    listText.Append($"`{_values.ElementAt(i)}`");
+                    listText.Append($"**`{_values.ElementAt(i)}`**");
                 }
                 else
                 {

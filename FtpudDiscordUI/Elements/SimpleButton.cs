@@ -9,8 +9,8 @@ namespace FtpudDiscordUI.Elements
     public class SimpleButton : UiElement
     {
         private readonly String _emote;
-        public readonly Func<Task> OnClick;
-        public SimpleButton(String emote, Func<Task> onClick)
+        public readonly Func<SocketReaction, Task> OnClick;
+        public SimpleButton(String emote, Func<SocketReaction, Task> onClick)
         {
             _emote = emote;
             OnClick = onClick;
@@ -25,7 +25,7 @@ namespace FtpudDiscordUI.Elements
         {
             if (reaction.Emote.Name == _emote)
             {
-                await OnClick();
+                await OnClick(reaction);
             }
         }
     }
